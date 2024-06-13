@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
+using SocialMediaFeed.BLL.Interfaces;
+using SocialMediaFeed.BLL.Services;
 using SocialMediaFeed.DAL;
 
 namespace SocialMediaFeed.Server
@@ -111,6 +113,8 @@ namespace SocialMediaFeed.Server
             ConfigureIdentity(services);
 
             services.AddScoped<SocialMediaFeedSeeder>();
+
+            services.AddScoped<IPostService, PostService>();
         }
 
         private static void AddMiddlewares(WebApplication app)

@@ -1,55 +1,78 @@
-import { useEffect, useState } from 'react';
+import {
+    useCallback,
+    useEffect,
+    useMemo,
+    useState
+} from 'react';
 
-interface Forecast {
-    date: string;
-    temperatureC: number;
-    temperatureF: number;
-    summary: string;
+import {
+    Container,
+    Table
+} from 'reactstrap';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+interface Post {
+    id: number;
+    content: string;
+    createdAt: Date;
+    userId: string;
 }
 
 function App() {
-    const [forecasts, setForecasts] = useState<Forecast[]>();
+    const [posts, setPosts] = useState<Post[]>();
 
-    useEffect(() => {
-        populateWeatherData();
+    const populatePosts = useCallback(async () => {
+        const response = await fetch('/api/post');
+
+        const data = await response.json();
+
+        setPosts(data);
     }, []);
 
-    const contents = forecasts === undefined
-        ? <p><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationreact">https://aka.ms/jspsintegrationreact</a> for more details.</em></p>
-        : <table className="table table-striped" aria-labelledby="tableLabel">
+    useEffect(() => {
+        document.documentElement.setAttribute('data-bs-theme', window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+        populatePosts();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const contents = useMemo(() => posts === undefined
+        ? <p><em>Loading...</em></p>
+        : <Table
+            striped
+            hover
+            responsive
+            bordered
+        >
             <thead>
                 <tr>
-                    <th>Date</th>
-                    <th>Temp. (C)</th>
-                    <th>Temp. (F)</th>
-                    <th>Summary</th>
+                    <th>ID</th>
+                    <th>Content</th>
+                    <th>Created at</th>
+                    <th>User ID</th>
                 </tr>
             </thead>
+
             <tbody>
-                {forecasts.map(forecast =>
-                    <tr key={forecast.date}>
-                        <td>{forecast.date}</td>
-                        <td>{forecast.temperatureC}</td>
-                        <td>{forecast.temperatureF}</td>
-                        <td>{forecast.summary}</td>
+                {posts.map(post =>
+                    <tr key={post.id}>
+                        <td>{post.id}</td>
+                        <td>{post.content}</td>
+                        <td>{new Date(post.createdAt).toLocaleString()}</td>
+                        <td>{post.userId}</td>
                     </tr>
                 )}
             </tbody>
-        </table>;
+        </Table>, [posts]);
 
     return (
-        <div>
-            <h1 id="tableLabel">Weather forecast</h1>
-            <p>This component demonstrates fetching data from the server.</p>
-            {contents}
-        </div>
-    );
+        <Container fluid>
+            <h1>Social media feed</h1>
 
-    async function populateWeatherData() {
-        const response = await fetch('weatherforecast');
-        const data = await response.json();
-        setForecasts(data);
-    }
+            {contents}
+        </Container>
+    );
 }
 
 export default App;
