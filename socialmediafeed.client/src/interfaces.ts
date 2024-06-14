@@ -2,6 +2,10 @@ import {
     InputType
 } from "reactstrap/types/lib/Input";
 
+import {
+    IconProp
+} from "@fortawesome/fontawesome-svg-core";
+
 export interface SimplePost {
     content: string;
 }
@@ -24,4 +28,11 @@ export interface FormInput<T> {
     label: string;
     type: InputType;
     required?: boolean;
+}
+
+export interface ButtonProps {
+    onClick?: () => void;
+    title: string;
+    icon: IconProp;
+    visible?: boolean;
 }

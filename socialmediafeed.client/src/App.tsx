@@ -30,10 +30,6 @@ import AppForm from './components/AppForm';
 import AppCard from './components/AppCard';
 
 import {
-    FontAwesomeIcon
-} from '@fortawesome/react-fontawesome';
-
-import {
     faThumbsUp,
     faTrash
 } from '@fortawesome/free-solid-svg-icons';
@@ -90,26 +86,19 @@ function App() {
                         </Col>
                     </Row>
                 )}
-                footer={(
-                    <Row>
-                        <Col xs="auto">
-                            <FontAwesomeIcon
-                                onClick={post.canDelete ? () => executeDeletePost(post) : undefined}
-                                title="Delete"
-                                icon={faTrash}
-                                role="button"
-                            />
-                        </Col>
-
-                        <Col xs="auto">
-                            <FontAwesomeIcon
-                                title="Like"
-                                icon={faThumbsUp}
-                                role="button"
-                            />
-                        </Col>
-                    </Row>
-                )}
+                buttons={[
+                    {
+                        onClick: () => { },
+                        title: 'Like',
+                        icon: faThumbsUp
+                    },
+                    {
+                        onClick: () => executeDeletePost(post),
+                        title: 'Delete',
+                        icon: faTrash,
+                        visible: post.canDelete
+                    }
+                ]}
                 text={post.content}
                 className="mb-3"
             />

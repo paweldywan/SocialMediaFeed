@@ -1,23 +1,35 @@
 import {
+    FontAwesomeIcon
+} from "@fortawesome/react-fontawesome";
+
+import {
     Card,
     CardHeader,
     CardBody,
     CardFooter,
-    CardText
+    CardText,
+    Col,
+    Row
 } from "reactstrap";
+
+import {
+    ButtonProps
+} from "../interfaces";
 
 interface Props {
     header: React.ReactNode;
-    footer: React.ReactNode;
+    footer?: React.ReactNode;
     text: React.ReactNode;
     className?: string;
+    buttons?: ButtonProps[];
 }
 
 const AppCard = ({
     header,
     footer,
     text,
-    className
+    className,
+    buttons
 }: Props) => {
     return (
         <Card className={className}>
@@ -32,9 +44,27 @@ const AppCard = ({
                     </CardText>
                 </CardBody>}
 
-            <CardFooter>
-                {footer}
-            </CardFooter>
+            {(footer || buttons) &&
+                <CardFooter>
+                    {footer}
+
+                    {buttons &&
+                        <Row>
+                            {buttons
+                                .filter(button => button.visible !== false)
+                                .map((button, index) => (
+                                    <Col xs="auto">
+                                        <FontAwesomeIcon
+                                            key={index}
+                                            onClick={button.onClick}
+                                            title={button.title}
+                                            role="button"
+                                            icon={button.icon}
+                                        />
+                                    </Col>
+                                ))}
+                        </Row>}
+                </CardFooter>}
         </Card>
     );
 };
