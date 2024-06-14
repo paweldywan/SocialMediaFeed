@@ -3,7 +3,6 @@ import {
     CardHeader,
     CardBody,
     CardFooter,
-    CloseButton,
     CardText
 } from "reactstrap";
 
@@ -12,27 +11,18 @@ interface Props {
     footer: React.ReactNode;
     text: React.ReactNode;
     className?: string;
-    onClose?: () => void;
 }
 
 const AppCard = ({
     header,
     footer,
     text,
-    className,
-    onClose
+    className
 }: Props) => {
     return (
         <Card className={className}>
             <CardHeader>
                 {header}
-
-                {onClose && (
-                    <CloseButton
-                        className="float-end"
-                        onClick={onClose}
-                    />
-                )}
             </CardHeader>
 
             {text &&

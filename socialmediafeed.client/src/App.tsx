@@ -6,7 +6,9 @@ import {
 } from 'react';
 
 import {
-    Container
+    Col,
+    Container,
+    Row
 } from 'reactstrap';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -24,7 +26,17 @@ import {
 } from './interfaces';
 
 import AppForm from './components/AppForm';
+
 import AppCard from './components/AppCard';
+
+import {
+    FontAwesomeIcon
+} from '@fortawesome/react-fontawesome';
+
+import {
+    faThumbsUp,
+    faTrash
+} from '@fortawesome/free-solid-svg-icons';
 
 function App() {
     const [posts, setPosts] = useState<Post[]>();
@@ -67,10 +79,38 @@ function App() {
         : posts.map(post =>
             <AppCard
                 key={post.id}
-                header={post.user.userName}
-                footer={new Date(post.createdAt).toLocaleString()}
+                header={(
+                    <Row>
+                        <Col>
+                            {post.user.userName}
+                        </Col>
+
+                        <Col className="text-end">
+                            {new Date(post.createdAt).toLocaleString()}
+                        </Col>
+                    </Row>
+                )}
+                footer={(
+                    <Row>
+                        <Col xs="auto">
+                            <FontAwesomeIcon
+                                onClick={post.canDelete ? () => executeDeletePost(post) : undefined}
+                                title="Delete"
+                                icon={faTrash}
+                                role="button"
+                            />
+                        </Col>
+
+                        <Col xs="auto">
+                            <FontAwesomeIcon
+                                title="Like"
+                                icon={faThumbsUp}
+                                role="button"
+                            />
+                        </Col>
+                    </Row>
+                )}
                 text={post.content}
-                onClose={post.canDelete ? () => executeDeletePost(post) : undefined}
                 className="mb-3"
             />
         ), [executeDeletePost, posts]);
