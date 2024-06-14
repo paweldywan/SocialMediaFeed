@@ -25,5 +25,13 @@ namespace SocialMediaFeed.Server.Controllers
 
             return Ok();
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await postService.Delete(id);
+
+            return Ok();
+        }
     }
 }

@@ -13,9 +13,17 @@ namespace SocialMediaFeed.BLL.Services
     {
         private string UserId => userManager.GetUserId(httpContextAccessor.HttpContext.User)!;
 
-        public Task<List<Post>> Get() => context.Posts
-            .Include(p => p.User)
-            .ToListAsync();
+        public async Task<List<Post>> Get()
+        {
+            var result = await context.Posts
+                .Include(p => p.User)
+                .OrderByDescending(p => p.CreatedAt)
+                .ToListAsync();
+
+            result.ForEach(p => p.CanDelete = p.UserId == UserId);
+
+            return result;
+        }
 
         public Task Add(SimplePost model)
         {
@@ -27,5 +35,12 @@ namespace SocialMediaFeed.BLL.Services
 
             return context.SaveChangesAsync();
         }
+
+        public Task Delete(int id) => context.Posts
+            .Where(p =>
+                p.Id == id &&
+                p.UserId == UserId
+             )
+            .ExecuteDeleteAsync();
     }
 }

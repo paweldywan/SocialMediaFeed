@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SocialMediaFeed.DAL.Entities
 {
@@ -13,5 +14,8 @@ namespace SocialMediaFeed.DAL.Entities
         public required string UserId { get; set; }
 
         public virtual IdentityUser? User { get; set; }
+
+        [NotMapped]
+        public bool CanDelete { get; set; }
     }
 }

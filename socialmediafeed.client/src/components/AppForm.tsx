@@ -45,6 +45,7 @@ const AppForm = <T,>({
                             ...data,
                             [input.field]: e.target.value
                         })}
+                        required={input.required}
                     />
                 </FormGroup>
             ))}

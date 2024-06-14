@@ -6,14 +6,14 @@ import {
 } from 'react';
 
 import {
-    Container,
-    Table
+    Container
 } from 'reactstrap';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import {
     addPost,
+    deletePost,
     getPosts
 } from './requests';
 
@@ -24,6 +24,7 @@ import {
 } from './interfaces';
 
 import AppForm from './components/AppForm';
+import AppCard from './components/AppCard';
 
 function App() {
     const [posts, setPosts] = useState<Post[]>();
@@ -48,6 +49,12 @@ function App() {
         await populatePosts();
     }, [postToAdd, populatePosts]);
 
+    const executeDeletePost = useCallback(async (post: Post) => {
+        await deletePost(post);
+
+        await populatePosts();
+    }, [populatePosts]);
+
     useEffect(() => {
         document.documentElement.setAttribute('data-bs-theme', window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 
@@ -57,38 +64,23 @@ function App() {
 
     const contents = useMemo(() => posts === undefined
         ? <p><em>Loading...</em></p>
-        : <Table
-            striped
-            hover
-            responsive
-            bordered
-        >
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Content</th>
-                    <th>Created at</th>
-                    <th>User ID</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                {posts.map(post =>
-                    <tr key={post.id}>
-                        <td>{post.id}</td>
-                        <td>{post.content}</td>
-                        <td>{new Date(post.createdAt).toLocaleString()}</td>
-                        <td>{post.userId}</td>
-                    </tr>
-                )}
-            </tbody>
-        </Table>, [posts]);
+        : posts.map(post =>
+            <AppCard
+                key={post.id}
+                header={post.userId}
+                footer={new Date(post.createdAt).toLocaleString()}
+                text={post.content}
+                onClose={post.canDelete ? () => executeDeletePost(post) : undefined}
+                className="mb-3"
+            />
+        ), [executeDeletePost, posts]);
 
     const inputs = useMemo<FormInput<SimplePost>[]>(() => [
         {
             field: 'content',
             label: 'Content',
-            type: 'textarea'
+            type: 'textarea',
+            required: true
         }
     ], []);
 

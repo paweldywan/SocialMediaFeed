@@ -30,3 +30,8 @@ export const addPost = (post: SimplePost) =>
         },
         body: JSON.stringify(post)
     });
+
+export const deletePost = (post: Post) =>
+    fetch(`/api/post/${post.id}`, {
+        method: 'DELETE'
+    });
