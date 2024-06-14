@@ -9,7 +9,7 @@ namespace SocialMediaFeed.DAL.Entities
 
         public required string Content { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
 
         public required string UserId { get; set; }
 

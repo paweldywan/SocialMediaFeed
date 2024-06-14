@@ -67,7 +67,7 @@ function App() {
         : posts.map(post =>
             <AppCard
                 key={post.id}
-                header={post.userId}
+                header={post.user.userName}
                 footer={new Date(post.createdAt).toLocaleString()}
                 text={post.content}
                 onClose={post.canDelete ? () => executeDeletePost(post) : undefined}

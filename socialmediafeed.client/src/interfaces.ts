@@ -6,11 +6,17 @@ export interface SimplePost {
     content: string;
 }
 
+interface User {
+    id: string;
+    userName: string;
+}
+
 export interface Post extends SimplePost {
     id: number;
     createdAt: Date;
     userId: string;
     canDelete: boolean;
+    user: User;
 }
 
 export interface FormInput<T> {

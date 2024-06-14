@@ -9,7 +9,7 @@ namespace SocialMediaFeed.BLL
         public SocialMediaFeedMappingProfile()
         {
             CreateMap<SimplePost, Post>()
-                .ForMember(p => p.CreatedAt, opt => opt.MapFrom(sp => DateTime.Now));
+                .ForMember(p => p.CreatedAt, opt => opt.MapFrom(sp => DateTimeOffset.UtcNow));
         }
     }
 }
