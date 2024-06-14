@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using SocialMediaFeed.BLL;
 using SocialMediaFeed.BLL.Interfaces;
 using SocialMediaFeed.BLL.Services;
 using SocialMediaFeed.DAL;
@@ -107,6 +109,8 @@ namespace SocialMediaFeed.Server
             services.AddSwaggerGen();
 
             services.AddHttpContextAccessor();
+
+            services.AddAutoMapper(typeof(SocialMediaFeedMappingProfile).Assembly);
 
             ConfigureDatabase(services, configuration, environment);
 

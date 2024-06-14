@@ -12,23 +12,41 @@ import {
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-interface Post {
-    id: number;
-    content: string;
-    createdAt: Date;
-    userId: string;
-}
+import {
+    addPost,
+    getPosts
+} from './requests';
+
+import {
+    FormInput,
+    Post,
+    SimplePost
+} from './interfaces';
+
+import AppForm from './components/AppForm';
 
 function App() {
     const [posts, setPosts] = useState<Post[]>();
 
-    const populatePosts = useCallback(async () => {
-        const response = await fetch('/api/post');
+    const [postToAdd, setPostToAdd] = useState<SimplePost>({
+        content: ''
+    });
 
-        const data = await response.json();
+    const populatePosts = useCallback(async () => {
+        const data = await getPosts();
 
         setPosts(data);
     }, []);
+
+    const executeAddPost = useCallback(async () => {
+        await addPost(postToAdd);
+
+        setPostToAdd({
+            content: ''
+        });
+
+        await populatePosts();
+    }, [postToAdd, populatePosts]);
 
     useEffect(() => {
         document.documentElement.setAttribute('data-bs-theme', window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
@@ -66,9 +84,25 @@ function App() {
             </tbody>
         </Table>, [posts]);
 
+    const inputs = useMemo<FormInput<SimplePost>[]>(() => [
+        {
+            field: 'content',
+            label: 'Content',
+            type: 'textarea'
+        }
+    ], []);
+
     return (
         <Container fluid>
             <h1>Social media feed</h1>
+
+            <AppForm
+                inputs={inputs}
+                data={postToAdd}
+                setData={setPostToAdd}
+                onSubmit={executeAddPost}
+                className="mb-3"
+            />
 
             {contents}
         </Container>
