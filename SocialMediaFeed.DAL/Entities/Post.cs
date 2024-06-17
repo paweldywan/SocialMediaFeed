@@ -1,21 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations.Schema;
+using SocialMediaFeed.DAL.Models;
 
 namespace SocialMediaFeed.DAL.Entities
 {
-    public class Post
+    public class Post : SimplePost
     {
-        public int Id { get; set; }
-
-        public required string Content { get; set; }
-
-        public DateTimeOffset CreatedAt { get; set; }
-
-        public required string UserId { get; set; }
-
         public virtual IdentityUser? User { get; set; }
-
-        [NotMapped]
-        public bool CanDelete { get; set; }
     }
 }

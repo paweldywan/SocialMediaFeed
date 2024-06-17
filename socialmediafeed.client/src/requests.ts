@@ -35,3 +35,8 @@ export const deletePost = (post: Post) =>
     fetch(`/api/post/${post.id}`, {
         method: 'DELETE'
     });
+
+export const likePost = (post: Post) =>
+    fetch(`/api/post/${post.id}/like`, {
+        method: 'POST'
+    });

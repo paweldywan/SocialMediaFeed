@@ -19,7 +19,7 @@ namespace SocialMediaFeed.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(SimplePost post)
+        public async Task<IActionResult> Add(PostToAdd post)
         {
             await postService.Add(post);
 
@@ -30,6 +30,14 @@ namespace SocialMediaFeed.Server.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             await postService.Delete(id);
+
+            return Ok();
+        }
+
+        [HttpPost("{id}/like")]
+        public async Task<IActionResult> Like(int id)
+        {
+            await postService.ToggleLike(id);
 
             return Ok();
         }

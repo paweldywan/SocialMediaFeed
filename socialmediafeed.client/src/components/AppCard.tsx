@@ -53,14 +53,18 @@ const AppCard = ({
                             {buttons
                                 .filter(button => button.visible !== false)
                                 .map((button, index) => (
-                                    <Col xs="auto">
+                                    <Col
+                                        xs="auto"
+                                        key={index}
+                                    >
                                         <FontAwesomeIcon
-                                            key={index}
                                             onClick={button.onClick}
                                             title={button.title}
                                             role="button"
                                             icon={button.icon}
                                         />
+                                        {button.text && " "}
+                                        {button.text}
                                     </Col>
                                 ))}
                         </Row>}

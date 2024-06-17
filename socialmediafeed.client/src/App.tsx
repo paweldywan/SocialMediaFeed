@@ -16,7 +16,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {
     addPost,
     deletePost,
-    getPosts
+    getPosts,
+    likePost
 } from './requests';
 
 import {
@@ -30,9 +31,13 @@ import AppForm from './components/AppForm';
 import AppCard from './components/AppCard';
 
 import {
-    faThumbsUp,
+    faThumbsUp as faThumbsUpSolid,
     faTrash
 } from '@fortawesome/free-solid-svg-icons';
+
+import {
+    faThumbsUp as faThumbsUpRegular
+} from '@fortawesome/free-regular-svg-icons';
 
 function App() {
     const [posts, setPosts] = useState<Post[]>();
@@ -63,6 +68,12 @@ function App() {
         await populatePosts();
     }, [populatePosts]);
 
+    const executeLikePost = useCallback(async (post: Post) => {
+        await likePost(post);
+
+        await populatePosts();
+    }, [populatePosts]);
+
     useEffect(() => {
         document.documentElement.setAttribute('data-bs-theme', window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 
@@ -78,7 +89,7 @@ function App() {
                 header={(
                     <Row>
                         <Col>
-                            {post.user.userName}
+                            {post.userName}
                         </Col>
 
                         <Col className="text-end">
@@ -88,9 +99,10 @@ function App() {
                 )}
                 buttons={[
                     {
-                        onClick: () => { },
+                        onClick: () => executeLikePost(post),
                         title: 'Like',
-                        icon: faThumbsUp
+                        icon: post.liked ? faThumbsUpSolid : faThumbsUpRegular,
+                        text: post.likesCount.toString()
                     },
                     {
                         onClick: () => executeDeletePost(post),
@@ -102,7 +114,7 @@ function App() {
                 text={post.content}
                 className="mb-3"
             />
-        ), [executeDeletePost, posts]);
+        ), [executeDeletePost, executeLikePost, posts]);
 
     const inputs = useMemo<FormInput<SimplePost>[]>(() => [
         {

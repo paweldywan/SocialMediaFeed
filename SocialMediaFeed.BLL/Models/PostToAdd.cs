@@ -2,7 +2,7 @@
 
 namespace SocialMediaFeed.BLL.Models
 {
-    public class SimplePost
+    public class PostToAdd
     {
         [Required]
         public required string Content { get; set; }
