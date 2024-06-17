@@ -23,7 +23,7 @@ namespace SocialMediaFeed.BLL.Services
                 .ProjectTo<PostDto>(mapper.ConfigurationProvider)
                 .ToListAsync();
 
-            result.ForEach(p => p.CanDelete = p.UserId == UserId);
+            result.ForEach(p => p.CanDelete = p.CanEdit = p.UserId == UserId);
 
             result.ForEach(p => p.Liked = p.Likes?.Any(l => l.UserId == UserId));
 
@@ -39,6 +39,22 @@ namespace SocialMediaFeed.BLL.Services
             context.Posts.Add(entity);
 
             return context.SaveChangesAsync();
+        }
+
+        public async Task Update(PostToUpdate model)
+        {
+            var post = await context.Posts
+                .SingleOrDefaultAsync(p =>
+                    p.Id == model.Id &&
+                    p.UserId == UserId
+                 );
+
+            if (post == null)
+                return;
+
+            mapper.Map(model, post);
+
+            await context.SaveChangesAsync();
         }
 
         public Task Delete(int id) => context.Posts

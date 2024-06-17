@@ -26,6 +26,14 @@ namespace SocialMediaFeed.Server.Controllers
             return Ok();
         }
 
+        [HttpPut]
+        public async Task<IActionResult> Update(PostToUpdate post)
+        {
+            await postService.Update(post);
+
+            return Ok();
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

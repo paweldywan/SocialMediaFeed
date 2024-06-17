@@ -15,6 +15,7 @@ export interface Post extends SimplePost {
     createdAt: Date;
     userId: string;
     canDelete: boolean;
+    canEdit: boolean;
     userName: string;
     likesCount: number;
     liked: boolean;

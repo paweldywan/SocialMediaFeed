@@ -14,6 +14,8 @@ namespace SocialMediaFeed.BLL
             CreateMap<Post, PostDto>()
                 .ForMember(p => p.UserName, opt => opt.MapFrom(p => p.User == null ? null : p.User.UserName))
                 .ForMember(p => p.LikesCount, opt => opt.MapFrom(p => p.Likes == null ? (int?)null : p.Likes.Count));
+
+            CreateMap<PostToUpdate, Post>();
         }
     }
 }

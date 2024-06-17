@@ -8,6 +8,8 @@ namespace SocialMediaFeed.BLL.Models
 
         public bool CanDelete { get; set; }
 
+        public bool CanEdit { get; set; }
+
         public int? LikesCount { get; set; }
 
         public bool? Liked { get; set; }

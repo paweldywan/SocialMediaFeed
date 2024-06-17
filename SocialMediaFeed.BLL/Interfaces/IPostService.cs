@@ -8,5 +8,6 @@ namespace SocialMediaFeed.BLL.Interfaces
         Task Delete(int id);
         Task<List<PostDto>> Get();
         Task ToggleLike(int id);
+        Task Update(PostToUpdate model);
     }
 }

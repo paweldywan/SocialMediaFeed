@@ -16,6 +16,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {
     addPost,
     deletePost,
+    editPost,
     getPosts,
     likePost
 } from './requests';
@@ -31,6 +32,8 @@ import AppForm from './components/AppForm';
 import AppCard from './components/AppCard';
 
 import {
+    faCancel,
+    faEdit,
     faThumbsUp as faThumbsUpSolid,
     faTrash
 } from '@fortawesome/free-solid-svg-icons';
@@ -45,6 +48,8 @@ function App() {
     const [postToAdd, setPostToAdd] = useState<SimplePost>({
         content: ''
     });
+
+    const [postToEdit, setPostToEdit] = useState<Post>();
 
     const populatePosts = useCallback(async () => {
         const data = await getPosts();
@@ -61,6 +66,17 @@ function App() {
 
         await populatePosts();
     }, [postToAdd, populatePosts]);
+
+    const executeEditPost = useCallback(async () => {
+        if (postToEdit === undefined)
+            return;
+
+        await editPost(postToEdit);
+
+        setPostToEdit(undefined);
+
+        await populatePosts();
+    }, [postToEdit, populatePosts]);
 
     const executeDeletePost = useCallback(async (post: Post) => {
         await deletePost(post);
@@ -105,16 +121,38 @@ function App() {
                         text: post.likesCount.toString()
                     },
                     {
+                        onClick: () => post.id === postToEdit?.id ? setPostToEdit(undefined) : setPostToEdit(post),
+                        title: post.id === postToEdit?.id ? 'Cancel' : 'Edit',
+                        icon: post.id === postToEdit?.id ? faCancel : faEdit,
+                        visible: post.canEdit
+                    },
+                    {
                         onClick: () => executeDeletePost(post),
                         title: 'Delete',
                         icon: faTrash,
                         visible: post.canDelete
                     }
                 ]}
-                text={post.content}
+                text={(
+                    post.id === postToEdit?.id
+                        ? <AppForm
+                            inputs={[
+                                {
+                                    field: 'content',
+                                    label: 'Content',
+                                    type: 'textarea',
+                                    required: true
+                                }
+                            ]}
+                            data={postToEdit}
+                            setData={setPostToEdit}
+                            onSubmit={executeEditPost}
+                        />
+                        : post.content
+                )}
                 className="mb-3"
             />
-        ), [executeDeletePost, executeLikePost, posts]);
+        ), [executeDeletePost, executeEditPost, executeLikePost, postToEdit, posts]);
 
     const inputs = useMemo<FormInput<SimplePost>[]>(() => [
         {

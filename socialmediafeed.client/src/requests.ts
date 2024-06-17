@@ -31,6 +31,15 @@ export const addPost = (post: SimplePost) =>
         body: JSON.stringify(post)
     });
 
+export const editPost = (post: Post) =>
+    fetch(`/api/post`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(post)
+    });
+
 export const deletePost = (post: Post) =>
     fetch(`/api/post/${post.id}`, {
         method: 'DELETE'
