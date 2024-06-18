@@ -23,9 +23,12 @@ namespace SocialMediaFeed.BLL.Services
                 .ProjectTo<PostDto>(mapper.ConfigurationProvider)
                 .ToListAsync();
 
-            result.ForEach(p => p.CanDelete = p.CanEdit = p.UserId == UserId);
+            result.ForEach(p =>
+            {
+                p.CanDelete = p.CanEdit = p.UserId == UserId;
 
-            result.ForEach(p => p.Liked = p.Likes?.Any(l => l.UserId == UserId));
+                p.Liked = p.Likes?.Any(l => l.UserId == UserId);
+            });
 
             return result;
         }
