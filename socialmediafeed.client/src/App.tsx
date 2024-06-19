@@ -145,7 +145,7 @@ function App() {
                         onClick: () => setPostPreviewIds(postPreviewIds.includes(post.id) ? postPreviewIds.filter(id => id !== post.id) : [...postPreviewIds, post.id]),
                         title: postPreviewIds.includes(post.id) ? 'Hide replies' : 'Show replies',
                         icon: postPreviewIds.includes(post.id) ? faCancel : faMagnifyingGlass,
-                        visible: post.posts?.length > 0
+                        visible: post.posts.length > 0
                     }
                 ]}
                 text={(
