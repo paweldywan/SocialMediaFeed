@@ -45,14 +45,6 @@ namespace SocialMediaFeed.BLL.Services
             post.CanDelete = post.CanEdit = post.UserId == UserId;
 
             post.Liked = post.Likes?.Any(l => l.UserId == UserId);
-
-            if (post.Posts != null)
-            {
-                foreach (var subPost in post.Posts)
-                {
-                    SetPostPermissions(subPost);
-                }
-            }
         }
 
         public Task Add(PostToAdd model)
