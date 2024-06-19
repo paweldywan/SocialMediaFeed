@@ -7,6 +7,6 @@ namespace SocialMediaFeed.DAL.Entities
     {
         public virtual IdentityUser? User { get; set; }
 
-        public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
+        public virtual ICollection<Post> Posts { get; set; } = [];
     }
 }

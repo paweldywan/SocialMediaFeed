@@ -12,7 +12,6 @@ namespace SocialMediaFeed.DAL.Models
         [JsonIgnore]
         public string? UserId { get; set; }
 
-        [JsonIgnore]
         public int? PostId { get; set; }
 
         public required string Content { get; set; }
