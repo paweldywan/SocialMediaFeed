@@ -6,5 +6,7 @@ namespace SocialMediaFeed.BLL.Models
     {
         [Required]
         public required string Content { get; set; }
+
+        public int? PostId { get; set; }
     }
 }

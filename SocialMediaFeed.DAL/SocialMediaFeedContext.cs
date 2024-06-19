@@ -12,5 +12,12 @@ namespace SocialMediaFeed.DAL
         public virtual DbSet<Post> Posts { get; set; }
 
         public virtual DbSet<Like> Likes { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(SocialMediaFeedContext).Assembly);
+        }
     }
 }

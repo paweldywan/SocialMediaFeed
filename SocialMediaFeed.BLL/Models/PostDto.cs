@@ -13,5 +13,7 @@ namespace SocialMediaFeed.BLL.Models
         public int? LikesCount { get; set; }
 
         public bool? Liked { get; set; }
+
+        public IEnumerable<PostDto>? Posts { get; set; }
     }
 }

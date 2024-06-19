@@ -17,9 +17,10 @@ import {
 } from "../interfaces";
 
 interface Props {
-    header: React.ReactNode;
+    header?: React.ReactNode;
     footer?: React.ReactNode;
-    text: React.ReactNode;
+    text?: React.ReactNode;
+    body?: React.ReactNode;
     className?: string;
     buttons?: ButtonProps[];
 }
@@ -28,20 +29,25 @@ const AppCard = ({
     header,
     footer,
     text,
+    body,
     className,
     buttons
 }: Props) => {
     return (
         <Card className={className}>
-            <CardHeader>
-                {header}
-            </CardHeader>
+            {header &&
+                <CardHeader>
+                    {header}
+                </CardHeader>}
 
-            {text &&
+            {(text || body) &&
                 <CardBody>
-                    <CardText>
-                        {text}
-                    </CardText>
+                    {text &&
+                        <CardText>
+                            {text}
+                        </CardText>}
+
+                    {body}
                 </CardBody>}
 
             {(footer || buttons) &&

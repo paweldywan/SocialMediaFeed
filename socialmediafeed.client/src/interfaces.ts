@@ -8,6 +8,7 @@ import {
 
 export interface SimplePost {
     content: string;
+    postId?: number;
 }
 
 export interface Post extends SimplePost {
@@ -19,6 +20,7 @@ export interface Post extends SimplePost {
     userName: string;
     likesCount: number;
     liked: boolean;
+    posts: Post[];
 }
 
 export interface FormInput<T> {

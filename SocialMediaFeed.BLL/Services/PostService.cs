@@ -23,14 +23,36 @@ namespace SocialMediaFeed.BLL.Services
                 .ProjectTo<PostDto>(mapper.ConfigurationProvider)
                 .ToListAsync();
 
-            result.ForEach(p =>
+            result.ForEach(SetPostPermissions);
+
+            CreatePostsTree(result, result);
+
+            return result.FindAll(p => p.PostId == null);
+        }
+
+        private static void CreatePostsTree(IEnumerable<PostDto> posts, IEnumerable<PostDto> allPosts)
+        {
+            foreach (var post in posts)
             {
-                p.CanDelete = p.CanEdit = p.UserId == UserId;
+                post.Posts = allPosts.Where(p => p.PostId == post.Id);
 
-                p.Liked = p.Likes?.Any(l => l.UserId == UserId);
-            });
+                CreatePostsTree(post.Posts, allPosts);
+            }
+        }
 
-            return result;
+        private void SetPostPermissions(PostDto post)
+        {
+            post.CanDelete = post.CanEdit = post.UserId == UserId;
+
+            post.Liked = post.Likes?.Any(l => l.UserId == UserId);
+
+            if (post.Posts != null)
+            {
+                foreach (var subPost in post.Posts)
+                {
+                    SetPostPermissions(subPost);
+                }
+            }
         }
 
         public Task Add(PostToAdd model)
@@ -60,12 +82,33 @@ namespace SocialMediaFeed.BLL.Services
             await context.SaveChangesAsync();
         }
 
-        public Task Delete(int id) => context.Posts
-            .Where(p =>
-                p.Id == id &&
-                p.UserId == UserId
-             )
-            .ExecuteDeleteAsync();
+        public async Task Delete(int id)
+        {
+            var post = await context.Posts
+                .Include(p => p.Posts)
+                .SingleOrDefaultAsync(p => p.Id == id && p.UserId == UserId);
+
+            if (post == null)
+                return;
+
+            await DeletePostAndSubPosts(post);
+
+            await context.SaveChangesAsync();
+        }
+
+        private async Task DeletePostAndSubPosts(Post post)
+        {
+            await context.Entry(post)
+                 .Collection(p => p.Posts)
+                 .LoadAsync();
+
+            foreach (var subPost in post.Posts)
+            {
+                await DeletePostAndSubPosts(subPost);
+            }
+
+            context.Posts.Remove(post);
+        }
 
         public async Task ToggleLike(int id)
         {
