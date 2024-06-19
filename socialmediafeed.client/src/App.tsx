@@ -92,7 +92,9 @@ function App() {
         await deletePost(post);
 
         await populatePosts();
-    }, [populatePosts]);
+
+        setPostPreviewIds(postPreviewIds.filter(id => id !== post.id));
+    }, [populatePosts, postPreviewIds]);
 
     const executeLikePost = useCallback(async (post: Post) => {
         await likePost(post);
@@ -199,7 +201,7 @@ function App() {
                 />
             )}
 
-            {postPreviewIds.includes(post.id) && (
+            {(postPreviewIds.includes(post.id) && post.posts.length > 0) && (
                 <AppCard
                     body={mapPosts(post.posts)}
                     className="mb-3"
