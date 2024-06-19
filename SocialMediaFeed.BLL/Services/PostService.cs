@@ -25,18 +25,20 @@ namespace SocialMediaFeed.BLL.Services
 
             result.ForEach(SetPostPermissions);
 
-            CreatePostsTree(result, result);
+            var postsLookup = result.ToLookup(p => p.PostId);
+
+            CreatePostsTree(result, postsLookup);
 
             return result.FindAll(p => p.PostId == null);
         }
 
-        private static void CreatePostsTree(IEnumerable<PostDto> posts, IEnumerable<PostDto> allPosts)
+        private static void CreatePostsTree(IEnumerable<PostDto> posts, ILookup<int?, PostDto> postsLookup)
         {
             foreach (var post in posts)
             {
-                post.Posts = allPosts.Where(p => p.PostId == post.Id);
+                post.Posts = postsLookup[post.Id];
 
-                CreatePostsTree(post.Posts, allPosts);
+                CreatePostsTree(post.Posts, postsLookup);
             }
         }
 
