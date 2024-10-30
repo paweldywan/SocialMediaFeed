@@ -92,7 +92,7 @@ namespace SocialMediaFeed.Server
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-            services.AddSqlServer<SocialMediaFeedContext>(connectionString);
+            services.AddNpgsql<SocialMediaFeedContext>(connectionString);
 
             var isDevelopment = environment.IsDevelopment();
 
