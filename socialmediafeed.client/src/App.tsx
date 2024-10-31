@@ -44,6 +44,10 @@ import {
     faThumbsUp as faThumbsUpRegular
 } from '@fortawesome/free-regular-svg-icons';
 
+import {
+    IconProp
+} from '@fortawesome/fontawesome-svg-core';
+
 import React from 'react';
 
 function App() {
@@ -120,19 +124,19 @@ function App() {
                     {
                         onClick: () => executeLikePost(post),
                         title: 'Like',
-                        icon: post.liked ? faThumbsUpSolid : faThumbsUpRegular,
+                        icon: post.liked ? faThumbsUpSolid as IconProp : faThumbsUpRegular as IconProp,
                         text: post.likesCount.toString()
                     },
                     {
                         onClick: () => post.id === postToEdit?.id ? setPostToEdit(undefined) : setPostToEdit(post),
                         title: post.id === postToEdit?.id ? 'Cancel' : 'Edit',
-                        icon: post.id === postToEdit?.id ? faCancel : faEdit,
+                        icon: post.id === postToEdit?.id ? faCancel as IconProp : faEdit as IconProp,
                         visible: post.canEdit
                     },
                     {
                         onClick: () => executeDeletePost(post),
                         title: 'Delete',
-                        icon: faTrash,
+                        icon: faTrash as IconProp,
                         visible: post.canDelete
                     },
                     {
@@ -141,12 +145,12 @@ function App() {
                             postId: subpostToAdd.postId !== post.id ? post.id : undefined
                         }),
                         title: subpostToAdd.postId !== post.id ? 'Reply' : 'Cancel reply',
-                        icon: subpostToAdd.postId !== post.id ? faPlus : faCancel
+                        icon: subpostToAdd.postId !== post.id ? faPlus as IconProp : faCancel as IconProp
                     },
                     {
                         onClick: () => setPostPreviewIds(postPreviewIds.includes(post.id) ? postPreviewIds.filter(id => id !== post.id) : [...postPreviewIds, post.id]),
                         title: postPreviewIds.includes(post.id) ? 'Hide replies' : 'Show replies',
-                        icon: postPreviewIds.includes(post.id) ? faCancel : faMagnifyingGlass,
+                        icon: postPreviewIds.includes(post.id) ? faCancel as IconProp : faMagnifyingGlass as IconProp,
                         visible: post.posts.length > 0
                     }
                 ]}
