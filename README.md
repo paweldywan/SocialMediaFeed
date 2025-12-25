@@ -358,7 +358,6 @@ This project is licensed under the MIT License. See the LICENSE file for details
 
 - GitHub: [@paweldywan](https://github.com/paweldywan)
 - Website: https://paweldywan.com/
-- Email: paweldywan@paweldywan.com
 
 ## Acknowledgments
 
